@@ -1,0 +1,40 @@
+import socket
+import hashlib
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+'''
+UDP_IP = "127.0.0.1"
+UDP_PORT = 8252
+MESSAGE = "Hello, World!"
+
+print ("UDP target IP:", UDP_IP)
+print ("UDP target port:", UDP_PORT)
+print ("message:", MESSAGE)
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.sendto(MESSAGE.encode(), (UDP_IP, UDP_PORT))
+'''
+
+def run(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
+    server_address = ('', 8252)
+    httpd = server_class(server_address, handler_class)
+    httpd.serve_forever()
+
+
+if __name__ == '__main__':
+
+    TCP_IP = '127.0.0.1'
+    TCP_PORT = 8252
+    BUFFER_SIZE = 1024
+    MESSAGE = hashlib.md5()
+    MESSAGE.update(str(TCP_IP).encode("utf-8"))
+    MESSAGE = MESSAGE.hexdigest()
+    MESSAGE += "\x00 "+ "hello"
+
+   # run()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((TCP_IP, TCP_PORT))
+    s.send(MESSAGE)
+    data = s.recv(BUFFER_SIZE)
+    s.close()
+    print ("received data:", d
